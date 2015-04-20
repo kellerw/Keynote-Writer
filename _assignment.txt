@@ -1,0 +1,7 @@
+File Name
+Author's last name
+text to start at
+text to end at
+starting page number in your copy of the book
+ending page number in your copy of the book
+List of keynotes you want.
