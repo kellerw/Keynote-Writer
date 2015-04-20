@@ -7,18 +7,10 @@ import org.xml.sax.helpers.DefaultHandler;
 
 public class KeynoteWriter {
   public static ArrayList<WordList> lists;
-  public static final String version = "Keynote Writer - version 1.05";
+  public static ArrayList<String>   types;
+  public static final String version = "Keynote Writer - version 1.06";
   
   public static void main(String[] args) throws IOException, SAXException, ParserConfigurationException {
-    for(String arg : args) {
-      switch(arg) {
-        case "-v":
-        case "--version":
-          System.out.println(version);
-          System.exit(0);
-          break;
-      }
-    }
     String[] mission = Writer.getLines("assignment.txt");
     String fileName  = mission[0] + ".txt";
     String author    = mission[1];
@@ -35,14 +27,39 @@ public class KeynoteWriter {
       endSent = lines[lines.length - 1];
     }
     
+    for(String arg : args) {
+      switch(arg) {
+        case "-v":
+        case "--version":
+          System.out.println(version);
+          System.exit(0);
+          break;
+        case "-l":
+        case "--list-types":
+          System.out.println("Options:\n  all");
+          for(String type : types)
+            System.out.printf(" %s\n", type);
+          System.exit(0);
+          break;
+        case "-h":
+        case "--help":
+          System.out.printf("%s\n  Options:\n    -h/--help\n      print this help page and exit\n    -l/--list-types\n      list avalilible figurative language options and exit\n    -v/--version\n      print this version and exit\n", version);
+          System.exit(0);
+          break;
+      }
+    }
+    
     String strTmp = "";
-    for(String abbreviation : getList("abbreviations").getWords())
+    for(String abbreviation : getList("abbreviations"))
       strTmp += abbreviation + "|\\b!";
     String strSplit = String.format("(?<!%s[A-Z])\\.\\s*", strTmp);
     
-    for (int i = 6; i < mission.length; i++) {
-      String type = mission[i];
-      int j       = 0;
+    List<String> missions = Arrays.asList(mission).subList(6, mission.length);
+    if(missions.contains("all"))
+      missions = types;
+    
+    for (String type : missions) {
+      int j = 0;
       if (!startSent.matches("start line")) {
         while (lines[j].indexOf(startSent) == -1) {
           j++;
@@ -53,19 +70,14 @@ public class KeynoteWriter {
         for (String strSentence : breakSentence(lines[j])) {
           //System.out.printf("%s\n=====================\n", strSentence);
           if (!done) {
-            String typeA[] = Writer.matchesMission( type, strSentence);
+            String typeA[] = Writer.matchesMission(type, strSentence);
             if (!typeA[0].matches("nope")) {
               String keynote = strSentence;
               keynote = String.format("\"%s\" (%s %.0f).",
                                       keynote.replaceAll("^ ", "").replaceAll("\\.?\\s*$", ""),
                                       author,
                                       nPages * ((j + 1.0) / lines.length) + 0.4 + nStartPage);
-              String finalkeynote = String.format("%s %s %s %s the %s ", 
-                                      author,
-                                      Writer.randomWord("useWords"),
-                                      typeA[0],
-                                      Writer.randomWord("throughWords"),
-                                      typeA[1]);
+              String finalkeynote = generateAnalysis(author, typeA[0], typeA[1]);
               System.out.println(keynote);
               System.out.print(finalkeynote);
               String response = keyboard.nextLine();
@@ -94,6 +106,7 @@ public class KeynoteWriter {
   
   public static void load() throws IOException, SAXException, ParserConfigurationException {
   	lists = new ArrayList<WordList>();
+		types = new ArrayList<String>();
 		
   	SAXParserFactory spfac = SAXParserFactory.newInstance();
     SAXParser sp = spfac.newSAXParser();
@@ -126,7 +139,24 @@ public class KeynoteWriter {
 
 		sp.parse("lists.xml", handler);
 		
+		WordList toIgnore = getList("ignore");
+		toIgnore.add("ignore");
+		for(WordList list : lists) {
+		  if(!toIgnore.contains(list.getName()))
+		    types.add(list.getName().toLowerCase());
+		}
+		
 		System.gc();//Try to delete no longer needed memory
+  }
+  
+  public static String generateAnalysis(String author, String analysisType, String option) {
+    String strAnalysis = Writer.randomWord("formats")
+      .replaceAll("{author}", author)
+      .replaceAll("{use}",    Writer.randomWord("useWords"))
+      .replaceAll("{type}", analysisType)
+      .replaceAll("{through}", Writer.randomWord("throughWords"))
+      .replaceAll("{option}", option);
+    return strAnalysis;
   }
   
   public static List<String> breakSentence(String strText) {
@@ -158,7 +188,7 @@ public class KeynoteWriter {
     if (sentence == null || sentence.isEmpty()) {
       return false;
     }
-    for (String w : getList("abbreviations").getWords()) {
+    for (String w : getList("abbreviations")) {
       if (sentence.contains(w)) {
         return true;
       }

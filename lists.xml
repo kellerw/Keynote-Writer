@@ -282,6 +282,18 @@
     <word>blizzard</word>
   </list>
   <list name="figurative language">
+    <word>$$simile</word>
+  </list>
+  <list name="ignore">
+    <word>formats</word>
+    <word>abbreviations</word>
+    <word>throughWords</word>
+    <word>useWords</word>
+  </list>
+  <list name="formats">
+    <word>{author} {use} {type} {through} the {option} </word>
+    <word>In this excerpt, {author} {use} {type} {through} the {option} </word>
+    <word>By using the word {option}, {author} {use} {type} </word>
   </list>
   <list name="gustatory imagery">
     <word>appetizing</word>
@@ -554,6 +566,8 @@
   <list name="throughWords">
     <word>through</word>
     <word>using</word>
+    <word>by using</word>
+    <word>by adding</word>
   </list>
   <list name="tone">
     <word>amiable</word>

@@ -25,12 +25,17 @@
 - Fixed a bug with the end sentence
 - Added a page estimater
 
-#### 1.04
+#### 1.04:
 - Changed file read back to "assignment.txt"
 - Using xml for word lists
 - Edited README.md
 - Added version printer
 
-#### 1.05
+#### 1.05:
 - Fixed error where titles such as "Dr." would count as an end of a sentance
 - Put quotation marks around quotes 
+
+#### 1.06:
+- Added more variety to the output format of the quote analysis
+- Added commandline opptions for help and list avalilible keynote types
+- Added support for "all" keynote which includes all keynote types listed with the -l option

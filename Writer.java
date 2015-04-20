@@ -60,7 +60,7 @@ public class Writer {
     String[] response = new String[2];
     WordList options  = KeynoteWriter.getList(type);
     
-    for (String option : options.getWords()) {
+    for (String option : options) {
       if (option.indexOf("$$") == -1) {
         if (line.indexOf(option) > -1) {
           response[0] = type;
@@ -69,9 +69,9 @@ public class Writer {
         }
       }
       else {
-        String[] typea = matchesMission(option.replace("$$", ""), line);
-        if (!typea[0].matches("nope")) {
-          return typea;
+        String[] typeA = matchesMission(option.replace("$$", ""), line);
+        if (!typeA[0].matches("nope")) {
+          return typeA;
         }
       }
     }

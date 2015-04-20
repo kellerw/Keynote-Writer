@@ -1,40 +1,37 @@
 import java.util.*;
 
-public class WordList {
+public class WordList extends ArrayList<String> {
   private String            strName;
-  private ArrayList<String> strWords;
-  
+
   public WordList() {
+    super();
     this.strName = "";
-    this.strWords = new ArrayList<String>();
   }
-  
+
   public WordList(String strName) {
+    super();
     this.strName = strName;
-    this.strWords = new ArrayList<String>();
   }
-  
-  public ArrayList<String> getWords() {
-    return strWords;
-  }
-  
+
   public void addWord(String word) {
-    strWords.add(word);
+    add(word);
   }
-  
-  public String get(int i) {
-    return strWords.get(i);
-  }
-  
-  public int size() {
-    return strWords.size();
-  }
-  
+
   public String getName() {
     return strName;
   }
-  
+
   public void setName(String strName) {
     this.strName = strName;
+  }
+  
+  @Override
+  public boolean contains(Object o) {
+    String paramStr = (String)o;
+    for (String s : this) {
+      if(paramStr.equalsIgnoreCase(s))
+        return true;
+    }
+    return false;
   }
 }
