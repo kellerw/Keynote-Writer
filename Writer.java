@@ -58,17 +58,18 @@ public class Writer {
 
   public static String[] matchesMission(String type, String line) {
     String[] response = new String[2];
-    String[] options  = getLines(type + ".txt");
-    for (int i = 0; i < options.length; i++) {
-      if (options[i].indexOf("$$") == -1) {
-        if (line.indexOf(options[i]) > -1) {
+    WordList options  = KeynoteWriter.getList(type);
+    
+    for (String option : options.getWords()) {
+      if (option.indexOf("$$") == -1) {
+        if (line.indexOf(option) > -1) {
           response[0] = type;
-          response[1] = options[i];
+          response[1] = option;
           return response;
         }
       }
       else {
-        String[] typea = matchesMission(options[i].replace("$$", ""), line);
+        String[] typea = matchesMission(option.replace("$$", ""), line);
         if (!typea[0].matches("nope")) {
           return typea;
         }

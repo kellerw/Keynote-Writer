@@ -2,11 +2,12 @@ import java.io.*;
 import java.util.*;
 import org.xml.sax.*;
 import javax.xml.parsers.*;
+import java.text.BreakIterator;
 import org.xml.sax.helpers.DefaultHandler;
 
 public class KeynoteWriter {
   public static ArrayList<WordList> lists;
-  public static final String version = "Keynote Writer - version 1.04";
+  public static final String version = "Keynote Writer - version 1.05";
   
   public static void main(String[] args) throws IOException, SAXException, ParserConfigurationException {
     for(String arg : args) {
@@ -33,6 +34,12 @@ public class KeynoteWriter {
     if (endSent.equals("end line")) {
       endSent = lines[lines.length - 1];
     }
+    
+    String strTmp = "";
+    for(String abbreviation : getList("abbreviations").getWords())
+      strTmp += abbreviation + "|\\b!";
+    String strSplit = String.format("(?<!%s[A-Z])\\.\\s*", strTmp);
+    
     for (int i = 6; i < mission.length; i++) {
       String type = mission[i];
       int j       = 0;
@@ -43,14 +50,14 @@ public class KeynoteWriter {
       }
       boolean done = false;
       while (lines[j].indexOf(endSent) == -1) {
-        String[] astrSentences = lines[j].split("\\.");
-        for (String strSentence : astrSentences) {
+        for (String strSentence : breakSentence(lines[j])) {
+          //System.out.printf("%s\n=====================\n", strSentence);
           if (!done) {
-            String typeA[] = Writer.matchesMission(type, strSentence);
+            String typeA[] = Writer.matchesMission( type, strSentence);
             if (!typeA[0].matches("nope")) {
-              String keynote = strSentence.replaceAll("\\.", "");
-              keynote = String.format("%s(%s %.0f).",
-                                      keynote.replaceAll("^ ", ""),
+              String keynote = strSentence;
+              keynote = String.format("\"%s\" (%s %.0f).",
+                                      keynote.replaceAll("^ ", "").replaceAll("\\.?\\s*$", ""),
                                       author,
                                       nPages * ((j + 1.0) / lines.length) + 0.4 + nStartPage);
               String finalkeynote = String.format("%s %s %s %s the %s ", 
@@ -120,6 +127,43 @@ public class KeynoteWriter {
 		sp.parse("lists.xml", handler);
 		
 		System.gc();//Try to delete no longer needed memory
+  }
+  
+  public static List<String> breakSentence(String strText) {
+    ArrayList<String> sentenceList = new ArrayList<String>();
+    BreakIterator iterator = BreakIterator.getSentenceInstance(Locale.US);
+    iterator.setText(strText);
+    
+    int start = iterator.first();
+    for (int end = iterator.next(); end != BreakIterator.DONE; start = end, end = iterator.next()) {
+      String strTmp = strText.substring(start,end).replaceAll(" $", "");
+      /*
+      System.out.println("-----------");
+      System.out.println(strTmp);
+      System.out.println(strTmp.substring(strTmp.lastIndexOf(" ")+1) + ": " + hasAbbreviation(strTmp.substring(strTmp.lastIndexOf(" ")+1)));
+      System.out.println("-----------");
+      */
+      while(hasAbbreviation(strTmp.substring(strTmp.lastIndexOf(" ")+1))) {
+        end = iterator.next();
+        if(end == BreakIterator.DONE)
+          break;
+        strTmp = strText.substring(start,end).replaceAll(" $", "");
+      }
+      sentenceList.add(strText.substring(start,end));
+    }
+    return sentenceList;
+  }
+
+  private static boolean hasAbbreviation(String sentence) {
+    if (sentence == null || sentence.isEmpty()) {
+      return false;
+    }
+    for (String w : getList("abbreviations").getWords()) {
+      if (sentence.contains(w)) {
+        return true;
+      }
+    }
+    return false;
   }
 }
 

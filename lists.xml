@@ -1,5 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <lists>
+  <list name="abbreviations">
+    <word>Dr.</word>
+    <word>Prof.</word>
+    <word>Mr.</word>
+    <word>Mrs.</word>
+    <word>Ms.</word>
+    <word>Jr.</word>
+    <word>Ph.D.</word>
+  </list>
   <list name="allusion">
     <word>Achilles</word>
     <word>Adonis</word>

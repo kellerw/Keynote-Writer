@@ -30,3 +30,7 @@
 - Using xml for word lists
 - Edited README.md
 - Added version printer
+
+#### 1.05
+- Fixed error where titles such as "Dr." would count as an end of a sentance
+- Put quotation marks around quotes 
