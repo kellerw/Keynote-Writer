@@ -151,11 +151,11 @@ public class KeynoteWriter {
   
   public static String generateAnalysis(String author, String analysisType, String option) {
     String strAnalysis = Writer.randomWord("formats")
-      .replaceAll("{author}", author)
-      .replaceAll("{use}",    Writer.randomWord("useWords"))
-      .replaceAll("{type}", analysisType)
-      .replaceAll("{through}", Writer.randomWord("throughWords"))
-      .replaceAll("{option}", option);
+      .replaceAll("(?i)\\{author\\}", author)
+      .replaceAll("(?i)\\{use\\}",    Writer.randomWord("useWords"))
+      .replaceAll("(?i)\\{type\\}", analysisType)
+      .replaceAll("(?i)\\{through\\}", Writer.randomWord("throughWords"))
+      .replaceAll("(?i)\\{option\\}", option);
     return strAnalysis;
   }
   
