@@ -45,7 +45,7 @@ public class Writer {
           out.println(oldlines[i]);
         }
       }
-      stuff_to_write.replaceAll("   ", "");
+      stuff_to_write.replaceAll(" +", " ");
       out.println(stuff_to_write);
     }
     catch (Exception e) {
@@ -62,8 +62,7 @@ public class Writer {
     
     for (String option : options) {
       if (option.indexOf("$$") == -1) {
-        //System.out.printf("%s\n(?i)[^\\s-\\.;/.]%s[.\\s-\\.;/$]\n\n", line, option);
-        if (line.matches(String.format("(?i)[-^\\s\\.;/]%s[-\\s\\.;/$]", option))) {
+        if (line.indexOf(option) > -1) {
           response[0] = type;
           response[1] = option;
           return response;

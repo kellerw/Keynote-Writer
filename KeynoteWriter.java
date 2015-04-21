@@ -85,6 +85,7 @@ public class KeynoteWriter {
                 finalkeynote = finalkeynote + response;
                 Writer.saveLine("keynotes.txt", keynote);
                 Writer.saveLine("keynotes.txt", finalkeynote);
+                Writer.saveLine("keynotes.txt", "");//New Line to seperate keynotes
                 done = true;
               }
               System.out.println();
