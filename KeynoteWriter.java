@@ -58,15 +58,15 @@ public class KeynoteWriter {
     if(missions.contains("all"))
       missions = types;
     
-    for (String type : missions) {
-      int j = 0;
-      if (!startSent.matches("start line")) {
-        while (lines[j].indexOf(startSent) == -1) {
-          j++;
-        }
+    int j = 0;
+    if (!startSent.matches("start line")) {
+      while (lines[j].indexOf(startSent) == -1) {
+        j++;
       }
-      boolean done = false;
-      while (lines[j].indexOf(endSent) == -1) {
+    }
+    boolean done = false;
+    while (lines[j].indexOf(endSent) == -1) {
+      for (String type : missions) {
         for (String strSentence : breakSentence(lines[j])) {
           //System.out.printf("%s\n=====================\n", strSentence);
           if (!done) {
@@ -78,14 +78,13 @@ public class KeynoteWriter {
                                       author,
                                       nPages * ((j + 1.0) / lines.length) + 0.4 + nStartPage);
               String finalkeynote = generateAnalysis(author, typeA[0], typeA[1]);
-              System.out.println(keynote);
+              System.out.print(keynote);
               System.out.print(finalkeynote);
               String response = keyboard.nextLine();
               if (!response.matches("")) {
-                finalkeynote = finalkeynote + response;
-                Writer.saveLine("keynotes.txt", keynote);
+                finalkeynote = finalkeynote + response + "\n\n---------------------------------\n\n";//Seperator
+                Writer.saveLine("keynotes.txt", keynote + "\n");
                 Writer.saveLine("keynotes.txt", finalkeynote);
-                Writer.saveLine("keynotes.txt", "");//New Line to seperate keynotes
                 done = true;
               }
               System.out.println();
