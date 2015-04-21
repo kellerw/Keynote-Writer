@@ -62,7 +62,7 @@ public class Writer {
     
     for (String option : options) {
       if (option.indexOf("$$") == -1) {
-        System.out.printf("%s\n(?i)[^\\s-\\.;/.]%s[.\\s-\\.;/$]\n\n", line, option);
+        //System.out.printf("%s\n(?i)[^\\s-\\.;/.]%s[.\\s-\\.;/$]\n\n", line, option);
         if (line.matches(String.format("(?i)[-^\\s\\.;/]%s[-\\s\\.;/$]", option))) {
           response[0] = type;
           response[1] = option;
