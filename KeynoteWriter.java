@@ -90,6 +90,10 @@ public class KeynoteWriter {
               System.out.println();
             }
           }
+          /*
+          System.out.println(strSentence);
+          System.out.println();
+          */
         }
         j++;
       }
@@ -150,13 +154,12 @@ public class KeynoteWriter {
   }
   
   public static String generateAnalysis(String author, String analysisType, String option) {
-    String strAnalysis = Writer.randomWord("formats")
-      .replaceAll("(?i)\\{author\\}", author)
-      .replaceAll("(?i)\\{use\\}",    Writer.randomWord("useWords"))
-      .replaceAll("(?i)\\{type\\}", analysisType)
+    return Writer.randomWord("formats")
+      .replaceAll("(?i)\\{author\\}",  author)
+      .replaceAll("(?i)\\{use\\}",     Writer.randomWord("useWords"))
+      .replaceAll("(?i)\\{type\\}",    analysisType)
       .replaceAll("(?i)\\{through\\}", Writer.randomWord("throughWords"))
-      .replaceAll("(?i)\\{option\\}", option);
-    return strAnalysis;
+      .replaceAll("(?i)\\{option\\}",  option);
   }
   
   public static List<String> breakSentence(String strText) {
@@ -173,13 +176,19 @@ public class KeynoteWriter {
       System.out.println(strTmp.substring(strTmp.lastIndexOf(" ")+1) + ": " + hasAbbreviation(strTmp.substring(strTmp.lastIndexOf(" ")+1)));
       System.out.println("-----------");
       */
-      while(hasAbbreviation(strTmp.substring(strTmp.lastIndexOf(" ")+1))) {
+      
+      /*While the last word in the /sentence/ is an abbreviation(Mr., Ms., Dr., ...)
+       *OR the /sentence/ has an unmatched(uneven number of) double quotes,
+       *expand it to the next /break point/
+       */
+      while(hasAbbreviation(strTmp.substring(strTmp.lastIndexOf(" ")+1)) || strTmp.replaceAll("[^\"]", "").length()%2 == 1) {
         end = iterator.next();
         if(end == BreakIterator.DONE)
           break;
         strTmp = strText.substring(start,end).replaceAll(" $", "");
       }
-      sentenceList.add(strText.substring(start,end));
+      //Add sentance to list, replacing double quotes to single quotes
+      sentenceList.add(strTmp.replaceAll("\"", "\'"));
     }
     return sentenceList;
   }
