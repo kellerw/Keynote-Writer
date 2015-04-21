@@ -36,17 +36,10 @@ public class Writer {
   } /* save */
 
   public static void saveLine(String filename, String stuff_to_write) {
-    String[] oldlines = getLines(filename);
     PrintWriter out = null;
     try {
-      out = new PrintWriter(filename);
-      for (int i = 0; i < oldlines.length; i++) {
-        if (oldlines[i] != null) {
-          out.println(oldlines[i]);
-        }
-      }
-      stuff_to_write.replaceAll(" +", " ");
-      out.println(stuff_to_write);
+      out = new PrintWriter(new BufferedWriter(new FileWriter(filename, true)));;
+      out.println(stuff_to_write.replaceAll(" +", " "));
     }
     catch (Exception e) {
       System.out.println("Something went wrong");
@@ -62,7 +55,8 @@ public class Writer {
     
     for (String option : options) {
       if (option.indexOf("$$") == -1) {
-        if (line.indexOf(option) > -1) {
+        System.out.printf("%s\n(?i)[^\\s-\\.;/.]%s\n\n", line, option);
+        if (line.matches(String.format("(?i)[-^\\s\\.;/]%s", option))) {
           response[0] = type;
           response[1] = option;
           return response;
