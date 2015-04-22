@@ -8,6 +8,7 @@ import org.xml.sax.helpers.DefaultHandler;
 public class KeynoteWriter {
   public static ArrayList<WordList> lists;
   public static ArrayList<String>   types;
+  public static boolean             gui = false;
   public static final String version = "Keynote Writer - version 1.06";
   
   public static void main(String[] args) throws IOException, SAXException, ParserConfigurationException {
@@ -29,6 +30,10 @@ public class KeynoteWriter {
     
     for(String arg : args) {
       switch(arg) {
+        case "-g":
+        case "--gui":
+          gui = true
+          break;
         case "-v":
         case "--version":
           System.out.println(version);
@@ -43,7 +48,7 @@ public class KeynoteWriter {
           break;
         case "-h":
         case "--help":
-          System.out.printf("%s\n  Options:\n    -h/--help\n      print this help page and exit\n    -l/--list-types\n      list avalilible figurative language options and exit\n    -v/--version\n      print this version and exit\n", version);
+          System.out.printf("%s\n  Options:\n    -h/--help\n      print this help page and exit\n    -g/--gui\n      enable gui\n    -l/--list-types\n      list avalilible figurative language options and exit\n    -v/--version\n      print this version and exit\n", version);
           System.exit(0);
           break;
       }
