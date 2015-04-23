@@ -49,11 +49,6 @@ public class KeynoteWriter {
       }
     }
     
-    String strTmp = "";
-    for(String abbreviation : getList("abbreviations"))
-      strTmp += abbreviation + "|\\b!";
-    String strSplit = String.format("(?<!%s[A-Z])\\.\\s*", strTmp);
-    
     List<String> missions = Arrays.asList(mission).subList(6, mission.length);
     if(missions.contains("all"))
       missions = types;
