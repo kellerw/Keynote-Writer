@@ -54,44 +54,45 @@ public class KeynoteWriter {
       missions = types;
     
     int j = 0;
+    String strText = "";
     if (!startSent.matches("start line")) {
-      while (lines[j].indexOf(startSent) == -1) {
+      while (lines[j].matches("(?i)" + startSent)) {
         j++;
       }
     }
-    boolean done = false;
-    while (lines[j].indexOf(endSent) == -1) {
+    for(; j<lines.length; j++) {
+      strText += lines[j];
+    }
+    
+    for (String strSentence : breakSentence(strText)) {
+      if(strSentence.matches("(?i)" + endSent))
+        break;
+      //System.out.printf("%s\n=====================\n", strSentence);
       for (String type : missions) {
-        for (String strSentence : breakSentence(lines[j])) {
-          //System.out.printf("%s\n=====================\n", strSentence);
-          if (!done) {
-            String typeA[] = Writer.matchesMission(type, strSentence);
-            if (!typeA[0].matches("nope")) {
-              String keynote = strSentence;
-              keynote = String.format("\"%s\" (%s %.0f).",
-                                      keynote.replaceAll("^ ", "").replaceAll("\\.?\\s*$", ""),
-                                      author,
-                                      nPages * ((j + 1.0) / lines.length) + 0.4 + nStartPage);
-              String finalkeynote = generateAnalysis(author, typeA[0], typeA[1]);
-              System.out.print(keynote);
-              System.out.print(finalkeynote);
-              String response = keyboard.nextLine();
-              if (!response.matches("")) {
-                finalkeynote = finalkeynote + response + "\n\n---------------------------------\n\n";//Seperator
-                Writer.saveLine("keynotes.txt", keynote + "\n");
-                Writer.saveLine("keynotes.txt", finalkeynote);
-                done = true;
-              }
-              System.out.println();
-            }
+        //System.out.printf("type: %s\nsent: %s\n=====================\n", type, strSentence);
+        String typeA[] = Writer.matchesMission(type, strSentence);
+        if (!typeA[0].matches("nope")) {
+          String keynote = strSentence;
+          keynote = String.format("\"%s\" (%s %.0f).",
+                                  keynote.replaceAll("^ ", "").replaceAll("\\.?\\s*$", ""),
+                                  author,
+                                  nPages * ((strText.indexOf(strSentence) + 1.0) / strText.length()) + 0.4 + nStartPage);
+          String finalkeynote = generateAnalysis(author, typeA[0], typeA[1]);
+          System.out.println(keynote);
+          System.out.print(finalkeynote);
+          String response = keyboard.nextLine();
+          if (!response.matches("")) {
+            finalkeynote = finalkeynote + response + "\n\n---------------------------------\n\n";//Seperator
+            Writer.saveLine("keynotes.txt", keynote + "\n");
+            Writer.saveLine("keynotes.txt", finalkeynote);
           }
-          /*
-          System.out.println(strSentence);
           System.out.println();
-          */
         }
-        j++;
       }
+      /*
+      System.out.println(strSentence);
+      System.out.println();
+      */
     }
   } /* main */
   
