@@ -54,18 +54,18 @@ public class Writer {
     WordList options  = KeynoteWriter.getList(type);
     
     for (String option : options) {
-      if (option.indexOf("$$") == -1) {
-        //System.out.printf("%s\n(?i)[^\\s-\\.;/.]%s\n\n", line, option);
-        if (line.matches(String.format("(?i)[-^\\s\\.;/]%s", option))) {
-          response[0] = type;
-          response[1] = option;
-          return response;
-        }
-      }
-      else {
+      if (option.matches("^\\$\\$")) {
         String[] typeA = matchesMission(option.replace("$$", ""), line);
         if (!typeA[0].matches("nope")) {
           return typeA;
+        }
+      }
+      else {
+        //System.out.printf("%s\n(?i)[-^\\s\\.;/.]%s\n\n", line, option);
+        if (line.matches(String.format("(?i).*[-^\\s\\.;/]%s[-^\\s\\.;/].*", option))) {
+          response[0] = type;
+          response[1] = option;
+          return response;
         }
       }
     }
