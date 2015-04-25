@@ -158,7 +158,7 @@ public class KeynoteWriter {
     nextQuote(0);
     if(gui) {
       frame = new JFrame("Keynote Writer");
-      frame.setSize(460, 300);
+      frame.setSize(460, 375);
       frame.setLocation(200, 100);
       frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
       frame.setContentPane(new KeynotePanel());
