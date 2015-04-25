@@ -61,7 +61,7 @@ public class KeynoteWriter {
       }
     }
     for(; j<lines.length; j++) {
-      strText += lines[j];
+      strText += lines[j] + " ";
     }
     
     for (String strSentence : breakSentence(strText)) {
