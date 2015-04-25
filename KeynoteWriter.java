@@ -1,6 +1,7 @@
 import java.io.*;
 import java.util.*;
 import org.xml.sax.*;
+import javax.swing.JFrame;
 import javax.xml.parsers.*;
 import java.text.BreakIterator;
 import org.xml.sax.helpers.DefaultHandler;
@@ -11,24 +12,52 @@ public class KeynoteWriter {
   public static boolean             gui = false;
   public static final String version = "Keynote Writer - version 1.06";
   
-  /*TODO
-   *Accessors
-   *  getQuote()    String
-   *  getAuthor()   String
-   *  getAnalysis() String
-   *  getPage()     int
-   *
-   *Modifiers
-   *  setAnalysis(String)
-   *  setPage(int)
-   *
-   *Iterators
-   *  nextQuote()
-   *  nextAnalysis()
-   *
-   *MISC Action Methods
-   *  save()
-   */
+  private static String strAuthor;
+  private static String strQuote;
+  private static String strAnalysis;
+  private static int    nPage;
+  
+  public static String getQuote() {
+    return strQuote;
+  }
+  
+  public static String getAuthor() {
+    return strAuthor;
+  }
+  
+  public static String getAnalysis() {
+    return strAnalysis;
+  }
+  
+  public static int getPage() {
+    return nPage;
+  }
+  
+  public static void setAnalysis(String strAnalysis) {
+    KeynoteWriter.strAnalysis = strAnalysis;
+  }
+  
+  public static void setPage(int nPage) {
+    KeynoteWriter.nPage = nPage;
+  }
+  
+  public static void nextQuote() {
+    //TODO
+  }
+  
+  public static void nextAnalysis() {
+    //TODO
+  }
+  
+  public static void save() {
+    Writer.saveLine("keynotes.txt",
+      String.format("\"%s\" (%s %d).\n\n%s\n\n---------------------------------\n\n",
+        strQuote,
+        strAuthor,
+        nPage,
+        strAnalysis));
+  }
+
   public static void main(String[] args) throws IOException, SAXException, ParserConfigurationException {
     String[] mission = Writer.getLines("assignment.txt");
     String fileName  = mission[0] + ".txt";
@@ -100,7 +129,7 @@ public class KeynoteWriter {
                                       keynote.replaceAll("^ ", "").replaceAll("\\.?\\s*$", ""),
                                       author,
                                       nPages * ((j + 1.0) / lines.length) + 0.4 + nStartPage);
-              String finalkeynote = generateAnalysis(author, typeA[0], typeA[1]);
+              String finalkeynote = generateAnalysis(typeA[0], typeA[1]);
               System.out.print(keynote);
               System.out.print(finalkeynote);
               String response = keyboard.nextLine();
@@ -176,9 +205,9 @@ public class KeynoteWriter {
 		System.gc();//Try to delete no longer needed memory
   }
   
-  public static String generateAnalysis(String author, String analysisType, String option) {
+  public static String generateAnalysis(String analysisType, String option) {
     return Writer.randomWord("formats")
-      .replaceAll("(?i)\\{author\\}",  author)
+      .replaceAll("(?i)\\{author\\}",  strAuthor)
       .replaceAll("(?i)\\{use\\}",     Writer.randomWord("useWords"))
       .replaceAll("(?i)\\{type\\}",    analysisType)
       .replaceAll("(?i)\\{through\\}", Writer.randomWord("throughWords"))
