@@ -1,4 +1,4 @@
 *.class
 Hiroshima.txt
 keynotes.txt
-Driver*
+*jar
