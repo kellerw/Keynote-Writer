@@ -88,12 +88,14 @@ public class KeynotePanel extends JPanel {
     //inputAnalysis = new JTextArea("An analysis");
     inputAnalysis.setLineWrap(true);
     inputAnalysis.setWrapStyleWord(true);
+    inputAnalysis.setRows(5);
+    JScrollPane scrollPane = new JScrollPane(inputAnalysis);
     c.fill        = GridBagConstraints.BOTH;
     c.gridx       = 0;
     c.gridy       = 4;
     c.gridwidth   = 0;
     c.ipady       = 0;
-    add(inputAnalysis, c);
+    add(scrollPane, c);
     //END Analysis Box
     
   }
