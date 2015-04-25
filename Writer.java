@@ -49,28 +49,21 @@ public class Writer {
     }
   } /* saveLine */
 
-  public static String[] matchesMission(String type, String line) {
-    String[] response = new String[2];
+  public static List<String[]> matchesMission(String type, String line) {
+    List<String[]> response = new ArrayList<String[]>();
     WordList options  = KeynoteWriter.getList(type);
     
     for (String option : options) {
       if (option.matches("^\\$\\$")) {
-        String[] typeA = matchesMission(option.replace("$$", ""), line);
-        if (!typeA[0].matches("nope")) {
-          return typeA;
-        }
+        response.addAll(matchesMission(option.replace("$$", ""), line));
       }
       else {
         //System.out.printf("%s\n(?i)[-^\\s\\.;/.]%s\n\n", line, option);
         if (line.matches(String.format("(?i).*[-^\\s\\.;/]%s[-^\\s\\.;/].*", option))) {
-          response[0] = type;
-          response[1] = option;
-          return response;
+          response.add(new String[] {type, option});
         }
       }
     }
-    response[0] = "nope";
-    response[1] = "nope";
     return response;
   } /* matchesMission */
 

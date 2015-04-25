@@ -10,13 +10,21 @@ public class KeynoteWriter {
   public static ArrayList<WordList> lists;
   public static ArrayList<String>   types;
   public static JFrame              frame;
-  public static boolean             gui = false;
-  public static final String version = "Keynote Writer - version 1.06";
+  public static boolean             gui     = false;
+  public static final String        version = "Keynote Writer - version 1.06";
   
-  private static String strAuthor;
-  private static String strQuote;
-  private static String strAnalysis;
-  private static int    nPage;
+  private static List<String>   lstrSentences;
+  private static List<String[]> lstrAnalyses;
+  private static List<String>   lstrMissions;
+  private static String         strAuthor;
+  private static String         strQuote;
+  private static String         strAnalysis;
+  private static String         strText;
+  private static int            nPage;
+  private static int            nSentance;
+  private static int            nAnalysis;
+  private static int            nStartPage;
+  private static int            nPages;
   
   public static String getQuote() {
     return strQuote;
@@ -43,11 +51,34 @@ public class KeynoteWriter {
   }
   
   public static void nextQuote() {
-    //TODO
+    nSentance++;
+    nAnalysis = 0;
+    if(nSentance >= lstrSentences.size())
+      System.exit(0);
+    
+    strQuote    = lstrSentences.get(nSentance).replaceAll("^ ", "").replaceAll("\\.?\\s*$", "");
+    nPage       = (int)(nPages * ((strText.indexOf(lstrSentences.get(nSentance)) + 1.0) / strText.length()) + 0.4 + nStartPage);
+    strAnalysis = generateAnalysis(lstrAnalyses.get(nAnalysis)[0], lstrAnalyses.get(nAnalysis)[1]);
+  }
+  
+  public static void nextQuote(int nQuote) {
+    nSentance = nQuote;
+    nAnalysis = 0;
+    if(nSentance >= lstrSentences.size())
+      System.exit(0);
+    
+    strQuote     = lstrSentences.get(nSentance).replaceAll("^ ", "").replaceAll("\\.?\\s*$", "");
+    nPage        = (int)(nPages * ((strText.indexOf(lstrSentences.get(nSentance)) + 1.0) / strText.length()) + 0.4 + nStartPage);
+    lstrAnalyses = generateAnalyses();
+    strAnalysis  = generateAnalysis(lstrAnalyses.get(nAnalysis)[0], lstrAnalyses.get(nAnalysis)[1]);
   }
   
   public static void nextAnalysis() {
-    //TODO
+    nAnalysis++;
+    if(nSentance >= lstrSentences.size())
+      nextQuote();
+    else
+      strAnalysis = generateAnalysis(lstrAnalyses.get(nAnalysis)[0], lstrAnalyses.get(nAnalysis)[1]);
   }
   
   public static void save() {
@@ -62,13 +93,19 @@ public class KeynoteWriter {
   public static void main(String[] args) throws IOException, SAXException, ParserConfigurationException {
     String[] mission = Writer.getLines("assignment.txt");
     String fileName  = mission[0] + ".txt";
-    String author    = mission[1];
+    strAuthor        = mission[1];
     String startSent = mission[2];
     String endSent   = mission[3];
-    int nStartPage   = Integer.parseInt(mission[4]);
-    int nEndPage     = Integer.parseInt(mission[5]);
-    int nPages       = nEndPage - nStartPage;
+    nStartPage       = Integer.parseInt(mission[4]);
+    nPages           = Integer.parseInt(mission[5]) - nStartPage;
     String[] lines   = Writer.getLines(fileName);
+    
+    strQuote    = "";
+    strAnalysis = "";
+    strText     = "";
+    nPage       = 0;
+    nSentance   = 0;
+    nAnalysis   = 0;
     
     load();
     Scanner keyboard = new Scanner(System.in);
@@ -81,13 +118,6 @@ public class KeynoteWriter {
         case "-g":
         case "--gui":
           gui = true;
-          
-          frame = new JFrame("Keynote Writer");
-          frame.setSize(460, 300);
-          frame.setLocation(200, 100);
-          frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-          frame.setContentPane(new KeynotePanel());
-          frame.setVisible(true);
           break;
         case "-v":
         case "--version":
@@ -109,12 +139,12 @@ public class KeynoteWriter {
       }
     }
     
-    List<String> missions = Arrays.asList(mission).subList(6, mission.length);
-    if(missions.contains("all"))
-      missions = types;
+    lstrMissions = Arrays.asList(mission).subList(6, mission.length);
+    if(lstrMissions.contains("all"))
+      lstrMissions = types;
     
     int j = 0;
-    String strText = "";
+    
     if (!startSent.matches("start line")) {
       while (lines[j].matches("(?i)" + startSent)) {
         j++;
@@ -124,41 +154,43 @@ public class KeynoteWriter {
       strText += lines[j] + " ";
     }
     
-    for (String strSentence : breakSentence(strText)) {
-      if(strSentence.matches("(?i)" + endSent))
-        break;
-      //System.out.printf("%s\n=====================\n", strSentence);
-      for (String type : missions) {
-        for (String strSentence : breakSentence(lines[j])) {
-          //System.out.printf("%s\n=====================\n", strSentence);
-          if (!done) {
-            String typeA[] = Writer.matchesMission(type, strSentence);
-            if (!typeA[0].matches("nope")) {
-              String keynote = strSentence;
-              keynote = String.format("\"%s\" (%s %.0f).",
-                                      keynote.replaceAll("^ ", "").replaceAll("\\.?\\s*$", ""),
-                                      author,
-                                      nPages * ((j + 1.0) / lines.length) + 0.4 + nStartPage);
-              String finalkeynote = generateAnalysis(typeA[0], typeA[1]);
-              System.out.print(keynote);
-              System.out.print(finalkeynote);
-              String response = keyboard.nextLine();
-              if (!response.matches("")) {
-                save();
-                done = true;
-              }
-              System.out.println();
-            }
-          }
-          System.out.println();
-        }
-      }
-      /*
-      System.out.println(strSentence);
-      System.out.println();
-      */
+    lstrSentences = breakSentence(strText);
+    nextQuote(0);
+    if(gui) {
+      frame = new JFrame("Keynote Writer");
+      frame.setSize(460, 300);
+      frame.setLocation(200, 100);
+      frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+      frame.setContentPane(new KeynotePanel());
+      frame.setVisible(true);
     }
-  } /* main */
+    else {
+      while(!strQuote.matches("(?i)" + endSent)) {
+        System.out.printf("\"%s\" (%s %.0f).\n",
+          strQuote,
+          strAuthor,
+          nPage);
+        System.out.print(strAnalysis);
+        String response = keyboard.nextLine();
+        if (!response.matches("")) {
+          save();
+          nextQuote();
+        }
+        else {
+          nextAnalysis();
+        }
+        System.out.println();
+      }
+    }
+  }
+  
+  public static List<String[]> generateAnalyses() {
+    List<String[]> analyses = new ArrayList<String[]>();
+    for(String mission : lstrMissions) {
+      analyses.addAll(Writer.matchesMission(mission, strQuote));
+    }
+    return analyses;
+  }
   
   public static WordList getList(String name) {
     for(WordList list : lists) {
