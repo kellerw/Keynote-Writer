@@ -5,13 +5,13 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
 
-public class PanelHailstones extends JPanel {
-  private JLabel labelQuoteStart;
-  private JLabel labelQuoteEnd;
-  private JTextField inputPage;
-  private JTextField inputAnalysis;
+public class KeynotePanel extends JPanel {
+  private JLabel      labelQuoteStart;
+  private JLabel      labelQuoteEnd;
+  private JTextField  inputPage;
+  private JTextArea   inputAnalysis;
   
-  public PanelHailstones() {
+  public KeynotePanel() {
     setLayout(new GridBagLayout());
     GridBagConstraints c = new GridBagConstraints();
     
@@ -20,11 +20,13 @@ public class PanelHailstones extends JPanel {
     quotePanel.setLayout(new FlowLayout());
     add(quotePanel, c);
     
-    labelQuoteStart = new JLabel(String.format("\"%s\" (%s ", KeynoteWriter.getQuote(), KeynoteWriter.getAuthor()));
-    labelQuoteStart.setFont(new Font("Serif",Font.PLAIN, 15));
+    //labelQuoteStart = new JLabel(String.format("\"%s\" (%s ", KeynoteWriter.getQuote(), KeynoteWriter.getAuthor()));
+    labelQuoteStart = new JLabel("\"Quote\" (Author ");
+    labelQuoteStart.setFont(new Font("Serif", Font.PLAIN, 15));
     quotePanel.add(labelQuoteStart);
     
-    inputPage = new JTextField("0", 3);
+    //inputPage = new JTextField(String.valueOf(KeynoteWriter.getPage()), 3);
+    inputPage = new JTextField("", 3);
     inputPage.setHorizontalAlignment(SwingConstants.CENTER);
     quotePanel.add(inputPage);
     
@@ -34,52 +36,43 @@ public class PanelHailstones extends JPanel {
     //END Quote Panel
     
     //START Buttons
-    JButton setButton = new JButton("Set");
-    setButton.addActionListener(new setListener());
-    panel.add(setButton, c);
+    JButton nextAnalysisButton = new JButton("Re-Analyze");
+    nextAnalysisButton.addActionListener(new NextListener());
+    add(nextAnalysisButton, c);
+    
+    JButton addQuoteButton = new JButton("Add");
+    addQuoteButton.addActionListener(new AddListener());
+    add(addQuoteButton, c);
+    
+    JButton cancelQuoteButton = new JButton("Cancel");
+    cancelQuoteButton.addActionListener(new CancelListener());
+    add(cancelQuoteButton, c);
     //END Buttons
     
     //START Analysis Box
-    inputAnalysis = new JTextField("0", 3);
-    inputAnalysis.setHorizontalAlignment(SwingConstants.LEFT);
-    quotePanel.add(inputAnalysis);
+    //inputAnalysis = new JTextArea(KeynoteWriter.getAnalysis(), 70, 15);
+    inputAnalysis = new JTextArea("An analysis", 70, 15);
+    //inputAnalysis.setHorizontalAlignment(SwingConstants.LEFT);
+    add(inputAnalysis, c);
     //END Analysis Box
     
   }
-  private class setListener implements ActionListener {
-    public void actionPerformed(ActionEvent e) {
-      int num = Integer.parseInt(userInputBox.getText());
-      
-      if(1 > num || num > 100)
-        labelError.setText("ERROR - Number must be in range 1-100");
-      else{
-        nNum = num;
-        labelError.setText("");
-      }
-      
-      labelNumber.setText(String.format("%d", nNum));
-      labelCounter.setText(String.format("%d", nCount=0));
-    }
-  }
+  
   private class NextListener implements ActionListener {
     public void actionPerformed(ActionEvent e) {
-      if(nNum % 2 == 0)
-        nNum = nNum/2;
-      else
-        nNum = nNum*3 + 1;
       
-      labelError.setText("");
-      labelNumber.setText(String.format("%d", nNum));
-      labelCounter.setText(String.format("%d", ++nCount));
     }
   }
-  private class RandomListener implements ActionListener {
+  
+  private class AddListener implements ActionListener {
     public void actionPerformed(ActionEvent e) {
-      nNum = (int)(Math.random()*100 + 1);
       
-      labelError.setText("");
-      labelNumber.setText(String.format("%d", nNum));
-      labelCounter.setText(String.format("%d", nCount=0));
+    }
+  }
+  
+  private class CancelListener implements ActionListener {
+    public void actionPerformed(ActionEvent e) {
+      
     }
   }
 }

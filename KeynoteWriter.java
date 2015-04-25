@@ -13,14 +13,14 @@ public class KeynoteWriter {
   
   /*TODO
    *Accessors
-   *  getQuote()
-   *  getAuthor()
-   *  getPage()
-   *  getAnalysis()
+   *  getQuote()    String
+   *  getAuthor()   String
+   *  getAnalysis() String
+   *  getPage()     int
    *
    *Modifiers
+   *  setAnalysis(String)
    *  setPage(int)
-   *  setAnalysis()
    *
    *Iterators
    *  nextQuote()
@@ -47,7 +47,7 @@ public class KeynoteWriter {
       switch(arg) {
         case "-g":
         case "--gui":
-          gui = true
+          gui = true;
           break;
         case "-v":
         case "--version":
