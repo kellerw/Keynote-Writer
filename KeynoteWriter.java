@@ -75,7 +75,7 @@ public class KeynoteWriter {
   
   public static void nextAnalysis() {
     nAnalysis++;
-    if(nSentance >= lstrSentences.size())
+    if(nAnalysis >= lstrAnalyses.size())
       nextQuote();
     else
       strAnalysis = generateAnalysis(lstrAnalyses.get(nAnalysis)[0], lstrAnalyses.get(nAnalysis)[1]);
@@ -83,7 +83,7 @@ public class KeynoteWriter {
   
   public static void save() {
     Writer.saveLine("keynotes.txt",
-      String.format("\"%s\" (%s %d).\n\n%s\n\n---------------------------------\n\n",
+      String.format("\"%s\" (%s %d).\n\n%s\n\n---------------------------------\n",
         strQuote,
         strAuthor,
         nPage,
@@ -158,7 +158,7 @@ public class KeynoteWriter {
     nextQuote(0);
     if(gui) {
       frame = new JFrame("Keynote Writer");
-      frame.setSize(460, 375);
+      frame.setSize(490, 440);
       frame.setLocation(200, 100);
       frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
       frame.setContentPane(new KeynotePanel());
