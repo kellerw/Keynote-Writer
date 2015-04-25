@@ -11,6 +11,21 @@ public class KeynoteWriter {
   public static boolean             gui = false;
   public static final String version = "Keynote Writer - version 1.06";
   
+  /*TODO
+   *Accessors
+   *  getQuote()
+   *  getAuthor()
+   *  getPage()
+   *  getAnalysis()
+   *
+   *Modifiers
+   *  setPage(int)
+   *  setAnalysis()
+   *
+   *Iterators
+   *  nextQuote()
+   *  nextAnalysis()
+   */
   public static void main(String[] args) throws IOException, SAXException, ParserConfigurationException {
     String[] mission = Writer.getLines("assignment.txt");
     String fileName  = mission[0] + ".txt";
