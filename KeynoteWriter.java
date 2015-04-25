@@ -51,7 +51,7 @@ public class KeynoteWriter {
   }
   
   public static void nextQuote() {
-    nSentance++;
+    while(++nSentance < 0);
     nAnalysis = 0;
     if(nSentance >= lstrSentences.size())
       System.exit(0);
@@ -66,24 +66,23 @@ public class KeynoteWriter {
   }
   
   public static void nextQuote(int nQuote) {
-    nSentance = nQuote;
-    nAnalysis = 0;
-    if(nSentance >= lstrSentences.size())
-      System.exit(0);
-    
-    strQuote     = lstrSentences.get(nSentance).replaceAll("^ ", "").replaceAll("\\.?\\s*$", "");
-    nPage        = (int)(nPages * ((strText.indexOf(lstrSentences.get(nSentance)) + 1.0) / strText.length()) + 0.4 + nStartPage);
-    lstrAnalyses = generateAnalyses();
-    strAnalysis  = generateAnalysis(lstrAnalyses.get(nAnalysis)[0], lstrAnalyses.get(nAnalysis)[1]);
+    nSentance = nQuote-1;
+    nextQuote();
   }
   
   public static void nextAnalysis() {
-    nAnalysis++;
+    while(++nAnalysis < 0);
+    
     //System.out.printf("nAnalysis: %d\nSize:      %d\n\n", nAnalysis, lstrAnalyses.size());
     if(nAnalysis >= lstrAnalyses.size())
       nextQuote();
     else
       strAnalysis = generateAnalysis(lstrAnalyses.get(nAnalysis)[0], lstrAnalyses.get(nAnalysis)[1]);
+  }
+  
+  public static void nextAnalysis(int nIndex) {
+    nAnalysis = nIndex-1;
+    nextAnalysis();
   }
   
   public static void save() {
