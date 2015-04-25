@@ -22,7 +22,7 @@ public class KeynoteWriter {
   private static String         strText;
   private static int            nPage;
   private static int            nSentance;
-  private static int            nAnalysis;
+  private static int            nAnalysis = 0;
   private static int            nStartPage;
   private static int            nPages;
   
@@ -56,9 +56,13 @@ public class KeynoteWriter {
     if(nSentance >= lstrSentences.size())
       System.exit(0);
     
-    strQuote    = lstrSentences.get(nSentance).replaceAll("^ ", "").replaceAll("\\.?\\s*$", "");
-    nPage       = (int)(nPages * ((strText.indexOf(lstrSentences.get(nSentance)) + 1.0) / strText.length()) + 0.4 + nStartPage);
-    strAnalysis = generateAnalysis(lstrAnalyses.get(nAnalysis)[0], lstrAnalyses.get(nAnalysis)[1]);
+    strQuote     = lstrSentences.get(nSentance).replaceAll("^ ", "").replaceAll("\\.?\\s*$", "");
+    nPage        = (int)(nPages * ((strText.indexOf(lstrSentences.get(nSentance)) + 1.0) / strText.length()) + 0.4 + nStartPage);
+    lstrAnalyses = generateAnalyses();
+    if(lstrAnalyses.size() == 0)
+      nextQuote();
+    else
+      strAnalysis  = generateAnalysis(lstrAnalyses.get(nAnalysis)[0], lstrAnalyses.get(nAnalysis)[1]);
   }
   
   public static void nextQuote(int nQuote) {
@@ -75,6 +79,7 @@ public class KeynoteWriter {
   
   public static void nextAnalysis() {
     nAnalysis++;
+    //System.out.printf("nAnalysis: %d\nSize:      %d\n\n", nAnalysis, lstrAnalyses.size());
     if(nAnalysis >= lstrAnalyses.size())
       nextQuote();
     else
@@ -105,7 +110,6 @@ public class KeynoteWriter {
     strText     = "";
     nPage       = 0;
     nSentance   = 0;
-    nAnalysis   = 0;
     
     load();
     Scanner keyboard = new Scanner(System.in);
