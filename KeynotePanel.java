@@ -24,7 +24,7 @@ public class KeynotePanel extends JPanel {
     c.ipady       = 30;
     add(quotePanel, c);
     
-    labelQuoteStart = new JLabel(String.format("<html><div style=\"width:250px;\">\"%s\" %s</div><html>", KeynoteWriter.getQuote()));
+    labelQuoteStart = new JLabel(String.format("<html><div style=\"width:250px;\">\"%s\"</div><html>", KeynoteWriter.getQuote()));
     //labelQuoteStart = new JLabel(String.format("<html><div style=\"text-align:justify;text-justify:inter-word;width:250px;\">%s</div><html>", "\"Oh, please. That doesn\'t even sound like him! The President\'s an idiot, you don\'t sound like an idiot. If you don\'t wanna talk to your mother, just avoid me like usual, huh? I\'ll just throw myself in traffic. I\'ll just Saran Wrap myself to the bed and pretend my child is suffocating me... \" "));
     labelQuoteStart.setFont(new Font("Serif", Font.PLAIN, 15));
     quotePanel.add(labelQuoteStart, BorderLayout.NORTH);
@@ -33,7 +33,7 @@ public class KeynotePanel extends JPanel {
     citationPanel.setLayout(new FlowLayout());
     quotePanel.add(citationPanel, BorderLayout.CENTER);
     
-    labelQuoteStart = new JLabel(String.format("(%s ", KeynoteWriter.getAuthor()));
+    labelQuoteMiddle = new JLabel(String.format("(%s ", KeynoteWriter.getAuthor()));
     //labelQuoteMiddle = new JLabel("(Korben's Mother ");
     labelQuoteMiddle.setFont(new Font("Serif", Font.PLAIN, 15));
     citationPanel.add(labelQuoteMiddle);
