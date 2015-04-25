@@ -9,14 +9,13 @@ JAVA = java
 JFLAGS = -encoding UTF-8
 CLASSPATH = .
 
-all:
-  compile jar clean
+all: compile jar clean
 
 compile:
-  $(JAVAC) -cp $(CLASSPATH) $(JFLAGS) *java
+	$(JAVAC) -cp $(CLASSPATH) $(JFLAGS) *java
 
 jar:
-  jar cvfe $(JAR_PKG) $(MAIN_CLASS) *class
+	jar cvfe $(JAR_PKG) $(MAIN_CLASS) *class lists.xml
 
 clean:
-  rm *class
+	rm *class
