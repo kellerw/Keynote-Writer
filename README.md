@@ -37,5 +37,5 @@
 
 #### 1.06:
 - Added more variety to the output format of the quote analysis
-- Added commandline opptions for help and list avalilible keynote types
+- Added command line options for help and list available keynote types
 - Added support for "all" keynote which includes all keynote types listed with the -l option
