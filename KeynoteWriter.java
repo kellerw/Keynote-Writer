@@ -9,6 +9,7 @@ import org.xml.sax.helpers.DefaultHandler;
 public class KeynoteWriter {
   public static ArrayList<WordList> lists;
   public static ArrayList<String>   types;
+  public static JFrame              frame;
   public static boolean             gui = false;
   public static final String version = "Keynote Writer - version 1.06";
   
@@ -80,6 +81,13 @@ public class KeynoteWriter {
         case "-g":
         case "--gui":
           gui = true;
+          
+          frame = new JFrame("Keynote Writer");
+          frame.setSize(460, 300);
+          frame.setLocation(200, 100);
+          frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+          frame.setContentPane(new KeynotePanel());
+          frame.setVisible(true);
           break;
         case "-v":
         case "--version":
