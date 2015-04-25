@@ -40,7 +40,7 @@ public class KeynotePanel extends JPanel {
     citationPanel.add(labelQuoteMiddle);
     
     inputPage = new JTextField(String.valueOf(KeynoteWriter.getPage()), 3);
-    inputPage = new JTextField("96", 3);
+    //inputPage = new JTextField("96", 3);
     inputPage.setHorizontalAlignment(SwingConstants.CENTER);
     citationPanel.add(inputPage);
     
@@ -117,6 +117,9 @@ public class KeynotePanel extends JPanel {
   
   private class AddListener implements ActionListener {
     public void actionPerformed(ActionEvent e) {
+      KeynoteWriter.setAnalysis(inputAnalysis.getText());
+      KeynoteWriter.setPage(Integer.valueOf(inputPage.getText()));
+      
       KeynoteWriter.save();
       KeynoteWriter.nextQuote();
       
