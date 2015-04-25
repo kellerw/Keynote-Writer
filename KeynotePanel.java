@@ -17,15 +17,16 @@ public class KeynotePanel extends JPanel {
     JPanel quotePanel = new JPanel();
     quotePanel.setLayout(new BorderLayout());
     c.fill        = GridBagConstraints.HORIZONTAL;
-    c.gridx       =  0;
-    c.gridy       =  0;
-    c.gridwidth   =  2;
-    c.gridheight  =  3;
-    c.ipady       = 30;
-    add(quotePanel, c);
+    c.gridx       =   0;
+    c.gridy       =   0;
+    c.gridwidth   =   2;
+    c.gridheight  =   3;
+    c.ipady       = 250;
+    c.ipadx       = 308;
+    add(new JScrollPane(quotePanel), c);
     
-    labelQuoteStart = new JLabel(String.format("<html><div style=\"width:250px;\">\"%s\"</div><html>", KeynoteWriter.getQuote()));
-    //labelQuoteStart = new JLabel(String.format("<html><div style=\"text-align:justify;text-justify:inter-word;width:250px;\">%s</div><html>", "\"Oh, please. That doesn\'t even sound like him! The President\'s an idiot, you don\'t sound like an idiot. If you don\'t wanna talk to your mother, just avoid me like usual, huh? I\'ll just throw myself in traffic. I\'ll just Saran Wrap myself to the bed and pretend my child is suffocating me... \" "));
+    labelQuoteStart = new JLabel(String.format("<html><div style=\"text-align:justify;text-justify:inter-word;width:240px;\">\"%s\"</div><html>", KeynoteWriter.getQuote()));
+    //labelQuoteStart = new JLabel(String.format("<html><div style=\"text-align:justify;text-justify:inter-word;width:240px;\">\"%s\"</div><html>", "\"Oh, please. That doesn\'t even sound like him! The President\'s an idiot, you don\'t sound like an idiot. If you don\'t wanna talk to your mother, just avoid me like usual, huh? I\'ll just throw myself in traffic. I\'ll just Saran Wrap myself to the bed and pretend my child is suffocating me... \" "));
     labelQuoteStart.setFont(new Font("Serif", Font.PLAIN, 15));
     quotePanel.add(labelQuoteStart, BorderLayout.NORTH);
     
@@ -58,6 +59,7 @@ public class KeynotePanel extends JPanel {
     c.gridwidth   = 1;
     c.gridheight  = 1;
     c.ipady       = 1;
+    c.ipadx       = 0;
     add(nextAnalysisButton, c);
     
     JButton addQuoteButton = new JButton("Add");
@@ -69,6 +71,7 @@ public class KeynotePanel extends JPanel {
     c.gridwidth   = 1;
     c.gridheight  = 1;
     c.ipady       = 1;
+    c.ipadx       = 0;
     add(addQuoteButton, c);
     
     JButton cancelQuoteButton = new JButton("Cancel");
@@ -80,6 +83,7 @@ public class KeynotePanel extends JPanel {
     c.gridwidth   = 1;
     c.gridheight  = 1;
     c.ipady       = 1;
+    c.ipadx       = 0;
     add(cancelQuoteButton, c);
     //END Buttons
     
@@ -91,10 +95,11 @@ public class KeynotePanel extends JPanel {
     inputAnalysis.setRows(5);
     JScrollPane scrollPane = new JScrollPane(inputAnalysis);
     c.fill        = GridBagConstraints.BOTH;
-    c.gridx       = 0;
-    c.gridy       = 4;
-    c.gridwidth   = 0;
-    c.ipady       = 0;
+    c.gridx       =  0;
+    c.gridy       =  4;
+    c.gridwidth   =  0;
+    c.ipady       = 80;
+    c.ipadx       =  0;
     add(scrollPane, c);
     //END Analysis Box
     
@@ -103,6 +108,9 @@ public class KeynotePanel extends JPanel {
   private class NextListener implements ActionListener {
     public void actionPerformed(ActionEvent e) {
       KeynoteWriter.nextAnalysis();
+      
+      labelQuoteStart.setText(String.format("<html><div style=\"text-align:justify;text-justify:inter-word;width:240px;\">\"%s\"</div><html>", KeynoteWriter.getQuote()));
+      inputPage.setText(String.valueOf(KeynoteWriter.getPage()));
       inputAnalysis.setText(KeynoteWriter.getAnalysis());
     }
   }
@@ -112,7 +120,7 @@ public class KeynotePanel extends JPanel {
       KeynoteWriter.save();
       KeynoteWriter.nextQuote();
       
-      labelQuoteStart.setText(String.format("<html><div style=\"width:250px;\">\"%s\" %s</div><html>", KeynoteWriter.getQuote()));
+      labelQuoteStart.setText(String.format("<html><div style=\"text-align:justify;text-justify:inter-word;width:240px;\">\"%s\"</div><html>", KeynoteWriter.getQuote()));
       inputPage.setText(String.valueOf(KeynoteWriter.getPage()));
       inputAnalysis.setText(KeynoteWriter.getAnalysis());
     }
@@ -122,7 +130,7 @@ public class KeynotePanel extends JPanel {
     public void actionPerformed(ActionEvent e) {
       KeynoteWriter.nextQuote();
       
-      labelQuoteStart.setText(String.format("\"%s\" ", KeynoteWriter.getQuote()));
+      labelQuoteStart.setText(String.format("<html><div style=\"text-align:justify;text-justify:inter-word;width:240px;\">\"%s\"</div><html>", KeynoteWriter.getQuote()));
       inputPage.setText(String.valueOf(KeynoteWriter.getPage()));
       inputAnalysis.setText(KeynoteWriter.getAnalysis());
     }
