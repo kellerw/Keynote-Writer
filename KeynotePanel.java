@@ -27,18 +27,18 @@ public class KeynotePanel extends JPanel {
     c.ipady       = 30;
     add(quotePanel, c);
     
-    //labelQuoteStart = new JLabel(String.format("\"%s\" ", KeynoteWriter.getQuote()));
-    labelQuoteStart = new JLabel("\"Quote\" ");
+    labelQuoteStart = new JLabel(String.format("\"%s\" ", KeynoteWriter.getQuote()));
+    //labelQuoteStart = new JLabel("\"Quote\" ");
     labelQuoteStart.setFont(new Font("Serif", Font.PLAIN, 15));
     quotePanel.add(labelQuoteStart);
     
-    //labelQuoteStart = new JLabel(String.format("(%s ", KeynoteWriter.getAuthor()));
-    labelQuoteMiddle = new JLabel("(Author ");
+    labelQuoteStart = new JLabel(String.format("(%s ", KeynoteWriter.getAuthor()));
+    //labelQuoteMiddle = new JLabel("(Author ");
     labelQuoteMiddle.setFont(new Font("Serif", Font.PLAIN, 15));
     quotePanel.add(labelQuoteMiddle);
     
-    //inputPage = new JTextField(String.valueOf(KeynoteWriter.getPage()), 3);
-    inputPage = new JTextField("0", 3);
+    inputPage = new JTextField(String.valueOf(KeynoteWriter.getPage()), 3);
+    //inputPage = new JTextField("0", 3);
     inputPage.setHorizontalAlignment(SwingConstants.CENTER);
     quotePanel.add(inputPage);
     
@@ -80,8 +80,8 @@ public class KeynotePanel extends JPanel {
     //END Buttons
     
     //START Analysis Box
-    //inputAnalysis = new JTextArea(KeynoteWriter.getAnalysis());
-    inputAnalysis = new JTextArea("An analysis");
+    inputAnalysis = new JTextArea(KeynoteWriter.getAnalysis());
+    //inputAnalysis = new JTextArea("An analysis");
     inputAnalysis.setLineWrap(true);
     inputAnalysis.setWrapStyleWord(true);
     c.fill        = GridBagConstraints.BOTH;
@@ -96,19 +96,29 @@ public class KeynotePanel extends JPanel {
   
   private class NextListener implements ActionListener {
     public void actionPerformed(ActionEvent e) {
-      
+      KeynoteWriter.nextAnalysis();
+      inputAnalysis.setText(KeynoteWriter.getAnalysis());
     }
   }
   
   private class AddListener implements ActionListener {
     public void actionPerformed(ActionEvent e) {
+      KeynoteWriter.save();
+      KeynoteWriter.nextQuote();
       
+      labelQuoteStart.setText(String.format("\"%s\" ", KeynoteWriter.getQuote()));
+      inputPage.setText(KeynoteWriter.getPage());
+      inputAnalysis.setText(KeynoteWriter.getAnalysis());
     }
   }
   
   private class CancelListener implements ActionListener {
     public void actionPerformed(ActionEvent e) {
+      KeynoteWriter.nextQuote();
       
+      labelQuoteStart.setText(String.format("\"%s\" ", KeynoteWriter.getQuote()));
+      inputPage.setText(KeynoteWriter.getPage());
+      inputAnalysis.setText(KeynoteWriter.getAnalysis());
     }
   }
 }
