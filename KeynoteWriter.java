@@ -136,8 +136,9 @@ public class KeynoteWriter {
 				}
 			}
     };
-
-		sp.parse("lists.xml", handler);
+    
+    InputStream in = KeynoteWriter.class.getResourceAsStream("/lists.xml");
+		sp.parse(in, handler);
 		
 		WordList toIgnore = getList("ignore");
 		toIgnore.add("ignore");
