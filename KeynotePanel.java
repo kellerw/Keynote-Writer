@@ -1,6 +1,3 @@
-//Andriy Zasypkin, 2014/05/08
-//Unit 3 - GUIs
-//Lab03  - Hailstones
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
