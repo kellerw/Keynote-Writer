@@ -10,9 +10,11 @@ public class KeynoteWriter {
   public static ArrayList<WordList> lists;
   public static ArrayList<String>   types;
   public static JFrame              frame;
-  public static boolean             gui     = false;
   public static final String        version = "Keynote Writer - version 1.07";
   
+  private static Scanner        keyboard;
+  private static String         startSent;
+  private static String         endSent;
   private static List<String>   lstrSentences;
   private static List<String[]> lstrAnalyses;
   private static List<String>   lstrMissions;
@@ -94,12 +96,12 @@ public class KeynoteWriter {
         strAnalysis));
   }
 
-  public static void main(String[] args) throws IOException, SAXException, ParserConfigurationException {
+  public static void init() throws IOException, SAXException, ParserConfigurationException {
     String[] mission = Writer.getLines("assignment.txt");
     String fileName  = mission[0] + ".txt";
     strAuthor        = mission[1];
-    String startSent = mission[2];
-    String endSent   = mission[3];
+    startSent        = mission[2];
+    endSent          = mission[3];
     nStartPage       = Integer.parseInt(mission[4]);
     nPages           = Integer.parseInt(mission[5]) - nStartPage;
     String[] lines   = Writer.getLines(fileName);
@@ -111,35 +113,9 @@ public class KeynoteWriter {
     nSentance   = 0;
     
     load();
-    Scanner keyboard = new Scanner(System.in);
+    keyboard = new Scanner(System.in);
     if (endSent.equals("end line")) {
       endSent = lines[lines.length - 1];
-    }
-    
-    for(String arg : args) {
-      switch(arg) {
-        case "-g":
-        case "--gui":
-          gui = true;
-          break;
-        case "-v":
-        case "--version":
-          System.out.println(version);
-          System.exit(0);
-          break;
-        case "-l":
-        case "--list-types":
-          System.out.println("Options:\n  all");
-          for(String type : types)
-            System.out.printf(" %s\n", type);
-          System.exit(0);
-          break;
-        case "-h":
-        case "--help":
-          System.out.printf("%s\n  Options:\n    -h/--help\n      print this help page and exit\n    -g/--gui\n      enable gui\n    -l/--list-types\n      list avalilible figurative language options and exit\n    -v/--version\n      print this version and exit\n", version);
-          System.exit(0);
-          break;
-      }
     }
     
     lstrMissions = Arrays.asList(mission).subList(6, mission.length);
@@ -159,34 +135,35 @@ public class KeynoteWriter {
     
     lstrSentences = breakSentence(strText);
     nextQuote(0);
-    if(gui) {
-      frame = new JFrame("Keynote Writer");
-      frame.setSize(490, 440);
-      frame.setLocation(200, 100);
-      frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-      frame.setContentPane(new KeynotePanel());
-      frame.setVisible(true);
-    }
-    else {
-      while(!strQuote.matches("(?i)" + endSent)) {
-        System.out.printf("\"%s\" (%s %.0f).\n",
-          strQuote,
-          strAuthor,
-          nPage);
-        System.out.print(strAnalysis);
-        String response = keyboard.nextLine();
-        if (!response.matches("")) {
-          save();
-          nextQuote();
-        }
-        else {
-          nextAnalysis();
-        }
-        System.out.println();
-      }
-    }
   }
   
+  public static void gui() {
+    frame = new JFrame("Keynote Writer");
+    frame.setSize(490, 440);
+    frame.setLocation(200, 100);
+    frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+    frame.setContentPane(new KeynotePanel());
+    frame.setVisible(true);
+  }
+  
+  public static void cli() {
+    while(!strQuote.matches("(?i)" + endSent)) {
+      System.out.printf("\"%s\" (%s %.0f).\n",
+        strQuote,
+        strAuthor,
+        nPage);
+      System.out.print(strAnalysis);
+      String response = keyboard.nextLine();
+      if (!response.matches("")) {
+        save();
+        nextQuote();
+      }
+      else {
+        nextAnalysis();
+      }
+      System.out.println();
+    }
+  }
   public static List<String[]> generateAnalyses() {
     List<String[]> analyses = new ArrayList<String[]>();
     for(String mission : lstrMissions) {
