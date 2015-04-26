@@ -122,17 +122,14 @@ public class KeynoteWriter {
     if(lstrMissions.contains("all"))
       lstrMissions = types;
     
-    int j = 0;
+    int j = -1;
+    while (!lines[++j].matches(String.format("(?i).*%s.*", startSent)) && !startSent.matches("(?i)start line"));
     
-    if (!startSent.matches("start line")) {
-      while (lines[j].matches("(?i)" + startSent)) {
-        j++;
-      }
-    }
-    for(; j<lines.length; j++) {
+    j--;
+    
+    while(++j<lines.length && !lines[j].matches(String.format("(?i).*%s.*", endSent)))
       strText += lines[j] + " ";
-    }
-    
+
     lstrSentences = breakSentence(strText);
     nextQuote(0);
   }
