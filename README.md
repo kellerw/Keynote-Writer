@@ -39,3 +39,18 @@
 - Added more variety to the output format of the quote analysis
 - Added command line options for help and list available keynote types
 - Added support for "all" keynote which includes all keynote types listed with the -l option
+
+#### 1.07:
+- Added characterization
+- Fixed regex error
+- Only matches whole words and endings
+- Fixes keynotes not to split in the middle of quotes
+- Adds in a new line to separate keynotes
+- Adds more variety for uses
+- Add in another option for through
+- Checks quotes before types
+- Added Olfactory imagery under imagery
+- Improved page estimator
+- Added GUI
+- Made a jar possible
+

@@ -11,7 +11,7 @@ public class KeynoteWriter {
   public static ArrayList<String>   types;
   public static JFrame              frame;
   public static boolean             gui     = false;
-  public static final String        version = "Keynote Writer - version 1.06";
+  public static final String        version = "Keynote Writer - version 1.07";
   
   private static List<String>   lstrSentences;
   private static List<String[]> lstrAnalyses;
