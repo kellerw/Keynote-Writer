@@ -103,39 +103,118 @@ public class KeynotePanel extends JPanel {
     add(scrollPane, c);
     //END Analysis Box
     
+    addKeyListener(new Keyboard());
   }
   
   private class NextListener implements ActionListener {
     public void actionPerformed(ActionEvent e) {
-      KeynoteWriter.nextAnalysis();
-      
-      labelQuoteStart.setText(String.format("<html><div style=\"text-align:justify;text-justify:inter-word;width:240px;\">\"%s\"</div><html>", KeynoteWriter.getQuote()));
-      inputPage.setText(String.valueOf(KeynoteWriter.getPage()));
-      inputAnalysis.setText(KeynoteWriter.getAnalysis());
+      next();
     }
   }
   
   private class AddListener implements ActionListener {
     public void actionPerformed(ActionEvent e) {
-      KeynoteWriter.setAnalysis(inputAnalysis.getText());
-      KeynoteWriter.setPage(Integer.valueOf(inputPage.getText()));
-      
-      KeynoteWriter.save();
-      KeynoteWriter.nextQuote();
-      
-      labelQuoteStart.setText(String.format("<html><div style=\"text-align:justify;text-justify:inter-word;width:240px;\">\"%s\"</div><html>", KeynoteWriter.getQuote()));
-      inputPage.setText(String.valueOf(KeynoteWriter.getPage()));
-      inputAnalysis.setText(KeynoteWriter.getAnalysis());
+      save();
     }
   }
   
   private class CancelListener implements ActionListener {
     public void actionPerformed(ActionEvent e) {
-      KeynoteWriter.nextQuote();
-      
-      labelQuoteStart.setText(String.format("<html><div style=\"text-align:justify;text-justify:inter-word;width:240px;\">\"%s\"</div><html>", KeynoteWriter.getQuote()));
-      inputPage.setText(String.valueOf(KeynoteWriter.getPage()));
-      inputAnalysis.setText(KeynoteWriter.getAnalysis());
+      cancel();
     }
+  }
+  
+  private class Keyboard implements KeyListener {
+    boolean ctrl  = false;
+    boolean enter = false;
+    boolean ecs   = false;
+    boolean left  = false;
+    boolean right = false;
+    boolean meta  = false;
+    
+    public void keyPressed(KeyEvent e) {
+      int key = e.getKeyCode();
+      switch(key) {
+        case(KeyEvent.VK_CONTROL ):
+          ctrl = true;
+          break;
+        case(KeyEvent.VK_ENTER):
+          enter = true;
+          break;
+        case(KeyEvent.VK_ESCAPE):
+          esc = true;
+          break;
+        case(KeyEvent.VK_LEFT):
+          left = true;
+          break;
+        case(KeyEvent.VK_RIGHT):
+          right = true;
+          break;
+        case(KeyEvent.VK_ALT):
+        case(KeyEvent.VK_META):
+          meta = true;
+          break;
+      }
+      if((ctrl || meta) && enter)
+        save();
+      else if((ctrl || meta) && esc)
+        cancel();
+      else if((ctrl || meta) && rigth)
+        next();
+    }
+    
+    public void keyReleased(KeyEvent e) {
+      int key = e.getKeyCode();
+      switch(key) {
+        case(KeyEvent.VK_CONTROL ):
+          ctrl = false;
+          break;
+        case(KeyEvent.VK_ENTER):
+          enter = false;
+          break;
+        case(KeyEvent.VK_ESCAPE):
+          esc = false;
+          break;
+        case(KeyEvent.VK_LEFT):
+          left = false;
+          break;
+        case(KeyEvent.VK_RIGHT):
+          right = false;
+          break;
+        case(KeyEvent.VK_ALT):
+        case(KeyEvent.VK_META):
+          meta = false;
+          break;
+      }
+    }
+    public void keyTyped(KeyEvent e);
+  }
+  
+  public void next() {
+    KeynoteWriter.nextAnalysis();
+      
+    labelQuoteStart.setText(String.format("<html><div style=\"text-align:justify;text-justify:inter-word;width:240px;\">\"%s\"</div><html>", KeynoteWriter.getQuote()));
+    inputPage.setText(String.valueOf(KeynoteWriter.getPage()));
+    inputAnalysis.setText(KeynoteWriter.getAnalysis());
+  }
+  
+  public void save() {
+    KeynoteWriter.setAnalysis(inputAnalysis.getText());
+    KeynoteWriter.setPage(Integer.valueOf(inputPage.getText()));
+    
+    KeynoteWriter.save();
+    KeynoteWriter.nextQuote();
+    
+    labelQuoteStart.setText(String.format("<html><div style=\"text-align:justify;text-justify:inter-word;width:240px;\">\"%s\"</div><html>", KeynoteWriter.getQuote()));
+    inputPage.setText(String.valueOf(KeynoteWriter.getPage()));
+    inputAnalysis.setText(KeynoteWriter.getAnalysis());
+  }
+  
+  public void cancel() {
+    KeynoteWriter.nextQuote();
+      
+    labelQuoteStart.setText(String.format("<html><div style=\"text-align:justify;text-justify:inter-word;width:240px;\">\"%s\"</div><html>", KeynoteWriter.getQuote()));
+    inputPage.setText(String.valueOf(KeynoteWriter.getPage()));
+    inputAnalysis.setText(KeynoteWriter.getAnalysis());
   }
 }
