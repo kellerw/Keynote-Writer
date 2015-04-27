@@ -28,6 +28,7 @@ public class KeynoteWriter {
   private static int            nStartPage;
   private static int            nPages;
   
+  //Accessor methods 'nuff said
   public static String getQuote() {
     return strQuote;
   }
@@ -44,6 +45,7 @@ public class KeynoteWriter {
     return nPage;
   }
   
+  //Set stuff used by gui
   public static void setAnalysis(String strAnalysis) {
     KeynoteWriter.strAnalysis = strAnalysis;
   }
@@ -52,8 +54,11 @@ public class KeynoteWriter {
     KeynoteWriter.nPage = nPage;
   }
   
+  //Looks for the next quote in text segment
+  //  if next quote has no analysis - keeps searching(recusive)
+  //  if no more quotes to look at  - exits w/ status 0
   public static void nextQuote() {
-    while(++nSentance < 0);
+    while(++nSentance < 0);//To ensure index is non-negative - also adds 1 to index no mater what
     nAnalysis = 0;
     if(nSentance >= lstrSentences.size())
       System.exit(0);
@@ -67,11 +72,15 @@ public class KeynoteWriter {
       strAnalysis  = generateAnalysis(lstrAnalyses.get(nAnalysis)[0], lstrAnalyses.get(nAnalysis)[1]);
   }
   
+  //Calls previouse function(method) but selects an excact quote to analyze
+  //  subtracts one form index b/c nextQuote(void) adds one to index
   public static void nextQuote(int nQuote) {
     nSentance = nQuote-1;
     nextQuote();
   }
   
+  //Selects next Analysis for current quote
+  //  if none found - go on to next quote by calling nextQuote(void) - see nextQuote()
   public static void nextAnalysis() {
     while(++nAnalysis < 0);
     
@@ -82,11 +91,14 @@ public class KeynoteWriter {
       strAnalysis = generateAnalysis(lstrAnalyses.get(nAnalysis)[0], lstrAnalyses.get(nAnalysis)[1]);
   }
   
+  //Same idea as nextQuote(int) but for analyses
   public static void nextAnalysis(int nIndex) {
     nAnalysis = nIndex-1;
     nextAnalysis();
   }
   
+  //Saves current quote/citation/analysis as stored in static variable declared
+  //  above into "keynotes.txt"
   public static void save() {
     Writer.saveLine("keynotes.txt",
       String.format("\"%s\" (%s %d).\n\n%s\n\n---------------------------------\n",
@@ -95,7 +107,12 @@ public class KeynoteWriter {
         nPage,
         strAnalysis));
   }
-
+  
+  //Setup of class so that it is possible to start up gui/cli
+  //  - load assignment
+  //  - load text
+  //  - load possible types of analyses
+  //  - generate fist quote/analysis
   public static void init() throws IOException, SAXException, ParserConfigurationException {
     String[] mission = Writer.getLines("assignment.txt");
     String fileName  = mission[0] + ".txt";
@@ -134,6 +151,7 @@ public class KeynoteWriter {
     nextQuote(0);
   }
   
+  //Start gui
   public static void gui() {
     frame = new JFrame("Keynote Writer");
     frame.setSize(490, 440);
@@ -143,6 +161,7 @@ public class KeynoteWriter {
     frame.setVisible(true);
   }
   
+  //Start cli
   public static void cli() {
     while(!strQuote.matches("(?i)" + endSent)) {
       System.out.printf("\"%s\" (%s %.0f).\n",
@@ -161,6 +180,9 @@ public class KeynoteWriter {
       System.out.println();
     }
   }
+  
+  //Generates and returns all possible analyses(as selected by user) for
+  //  current quote and returns list
   public static List<String[]> generateAnalyses() {
     List<String[]> analyses = new ArrayList<String[]>();
     for(String mission : lstrMissions) {
@@ -169,6 +191,8 @@ public class KeynoteWriter {
     return analyses;
   }
   
+  //Find list of word(see lists.xml) by name of list and return
+  //  if not found return empty default(nameless) list
   public static WordList getList(String name) {
     for(WordList list : lists) {
       if(list.getName().equalsIgnoreCase(name))
@@ -177,6 +201,7 @@ public class KeynoteWriter {
     return new WordList();
   }
   
+  //Load xml file(from jar) into list of WordList(s)
   public static void load() throws IOException, SAXException, ParserConfigurationException {
   	lists = new ArrayList<WordList>();
 		types = new ArrayList<String>();
@@ -223,6 +248,8 @@ public class KeynoteWriter {
 		System.gc();//Try to delete no longer needed memory
   }
   
+  //Select a random format for formats(see '<list name="formats">' in lists.xml)
+  //  and return after replacing place holders with current quote/analysis information
   public static String generateAnalysis(String analysisType, String option) {
     return Writer.randomWord("formats")
       .replaceAll("(?i)\\{author\\}",  strAuthor)
@@ -232,6 +259,8 @@ public class KeynoteWriter {
       .replaceAll("(?i)\\{option\\}",  option);
   }
   
+  //Split text selection - initialized in init()
+  //  by sentances
   public static List<String> breakSentence(String strText) {
     ArrayList<String> sentenceList = new ArrayList<String>();
     BreakIterator iterator = BreakIterator.getSentenceInstance(Locale.US);
@@ -262,7 +291,9 @@ public class KeynoteWriter {
     }
     return sentenceList;
   }
-
+  
+  //Checks if string(usually last word of sentance is passed to this method)
+  //  has an abbreviation in it(see '<list name="abbreviations">' in lists.xml)
   private static boolean hasAbbreviation(String sentence) {
     if (sentence == null || sentence.isEmpty()) {
       return false;
