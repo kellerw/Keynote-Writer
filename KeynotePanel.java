@@ -127,7 +127,7 @@ public class KeynotePanel extends JPanel {
   private class Keyboard implements KeyListener {
     boolean ctrl  = false;
     boolean enter = false;
-    boolean ecs   = false;
+    boolean esc   = false;
     boolean left  = false;
     boolean right = false;
     boolean meta  = false;
@@ -159,7 +159,7 @@ public class KeynotePanel extends JPanel {
         save();
       else if((ctrl || meta) && esc)
         cancel();
-      else if((ctrl || meta) && rigth)
+      else if((ctrl || meta) && right)
         next();
     }
     
@@ -187,7 +187,9 @@ public class KeynotePanel extends JPanel {
           break;
       }
     }
-    public void keyTyped(KeyEvent e);
+    public void keyTyped(KeyEvent e) {
+      //Nothing needed to be done
+    }
   }
   
   public void next() {
