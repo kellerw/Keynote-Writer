@@ -142,10 +142,8 @@ public class KeynoteWriter {
     int j = -1;
     while (!lines[++j].matches(String.format("(?i).*%s.*", startSent)) && !startSent.matches("(?i)start line"));
     
-    j--;
-    
-    while(++j<lines.length && !lines[j].matches(String.format("(?i).*%s.*", endSent)))
-      strText += lines[j] + " ";
+    while(j<lines.length && !lines[j].matches(String.format("(?i).*%s.*", endSent)))
+      strText += lines[j++] + " ";
 
     lstrSentences = breakSentence(strText);
     nextQuote(0);
