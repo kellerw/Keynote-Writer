@@ -45,7 +45,7 @@ public class KeynotePanel extends JPanel {
     citationPanel.add(inputPage);
     
     labelQuoteEnd = new JLabel(").");
-    labelQuoteEnd.setFont(new Font("Serif",Font.PLAIN, 15));
+    labelQuoteEnd.setFont(new Font("Serif", Font.PLAIN, 15));
     citationPanel.add(labelQuoteEnd);
     //END Quote Panel
     
